@@ -37,5 +37,8 @@ Temporary Items
 # Local History for Visual Studio Code
 .history/
 
+# dotenv file (CONTAINS TOKEN)
+.env
+
 # node_modules (takes up a shit ton of space)
 node_modules/
