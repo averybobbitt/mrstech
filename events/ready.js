@@ -1,7 +1,6 @@
-module.exports = {
-  name: "ready",
-  once: true,
-  execute(client) {
-    console.log("Ready!");
-  },
-};
+export const name = "ready";
+export const once = true;
+
+export function execute(client) {
+  console.log("Ready!");
+}

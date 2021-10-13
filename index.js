@@ -1,17 +1,17 @@
 // Require the necessary classes
-const fs = require("fs");
-const { Client, Collection, Intents } = require("discord.js");
-const dotenv = require("dotenv");
+import { readdirSync } from "fs";
+import { Client, Collection, Intents } from "discord.js";
+import { config } from "dotenv";
 
 // Initialize environment variables
-dotenv.config();
+config();
 
 // Create a new client instance
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
 // Initialize commands
 client.commands = new Collection();
-const commandDir = fs.readdirSync("./commands").filter((file) => file.endsWith(".js"));
+const commandDir = readdirSync("./commands").filter((file) => file.endsWith(".js"));
 
 for (const file of commandDir) {
   const command = require(`./commands/${file}`);
@@ -20,7 +20,7 @@ for (const file of commandDir) {
 }
 
 // Event handling
-const events = fs.readdirSync("./events").filter((file) => file.endsWith(".js"));
+const events = readdirSync("./events").filter((file) => file.endsWith(".js"));
 for (const file of events) {
   const event = require(`./events/${file}`);
   if (event.once) {
