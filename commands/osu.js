@@ -12,12 +12,12 @@ module.exports = {
   async execute(interaction) {
     const color = "darkpink";
     const username = interaction.options.getString("player");
-    const baseURL = `https://lemmmy.pw/osusig/sig.php?colour=${color}&uname=${username}&pp=0&removeavmargin&darktriangles&xpbar&xpbarhex`;
+    const imgURL = `https://lemmmy.pw/osusig/sig.php?colour=${color}&uname=${username}&pp=0&removeavmargin&darktriangles&xpbar&xpbarhex`;
 
     if (validateColor(color)) {
       color = interaction.options.getString("color").replace("#", "hex");
     }
 
-    await interaction.reply({ files: [new MessageAttachment(baseURL)] });
+    await interaction.reply({ files: [imgURL] });
   },
 };
