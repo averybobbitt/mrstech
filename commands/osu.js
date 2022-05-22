@@ -10,14 +10,21 @@ module.exports = {
     .addStringOption((option) => option.setName("color").setDescription("background color")),
 
   async execute(interaction) {
-    const color = "darkpink";
+    var color = interaction.options.getString("color");;
     const username = interaction.options.getString("player");
     const imgURL = `https://lemmmy.pw/osusig/sig.php?colour=${color}&uname=${username}&pp=0&removeavmargin&darktriangles&xpbar&xpbarhex`;
-
+      
     if (validateColor(color)) {
       color = interaction.options.getString("color").replace("#", "hex");
+    } else {
+      await interaction.reply({
+        content: "The color you entered was invalid, defaulting to dark pink.",
+        ephemeral: true,
+      });
+
+      color = "pink";
     }
 
-    await interaction.reply({ files: [imgURL] });
+      await interaction.reply(imgURL);
   },
 };
