@@ -54,7 +54,8 @@ module.exports = {
 
     colors.forEach((color) => {
       const oldRole = gRoles.cache.find((r) => r.name.toLowerCase() === color);
-      if (mRoles.cache.some((r) => r.name.toLowerCase() === color)) mRoles.remove(oldRole);
+      if (mRoles.cache.some((r) => r.name.toLowerCase() === color))
+        mRoles.remove(oldRole);
     });
 
     if (choice !== "clear") mRoles.add(newRole);
