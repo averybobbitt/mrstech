@@ -14,21 +14,17 @@ module.exports = {
     ),
 
   async execute(interaction) {
-    var color = interaction.options.getString("color");
     const username = interaction.options.getString("player");
-    const imgURL = `https://lemmmy.pw/osusig/sig.php?colour=${color}&uname=${username}&pp=0&removeavmargin&darktriangles&xpbar&xpbarhex`;
+    var color = interaction.options.getString("color");
+
+    if (color == null) color = "pink";
 
     if (validateColor(color)) {
-      color = interaction.options.getString("color").replace("#", "hex");
-    } else {
-      await interaction.reply({
-        content: "The color you entered was invalid, defaulting to dark pink.",
-        ephemeral: true,
-      });
-
-      color = "pink";
+      color = color.replace("#", "hex");
     }
 
-    await interaction.reply(imgURL);
+    const img = `https://lemmmy.pw/osusig/sig.php?colour=${color}&uname=${username}&pp=0&removeavmargin&darktriangles&xpbar&xpbarhex`;
+
+    await interaction.reply(img);
   },
 };
