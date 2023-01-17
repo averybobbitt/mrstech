@@ -1,29 +1,22 @@
 {
-  "name": "mrstech",
-  "version": "",
-  "description": "dev branch",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node deploy-commands.js && node index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git@bobbitt.dev:avery/mrstech.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@discordjs/builders": "^0.6.0",
-    "@discordjs/rest": "^0.1.0-canary.0",
-    "@discordjs/voice": "^0.9.0",
-    "bufferutil": "^4.0.6",
-    "discord-api-types": "^0.23.1",
-    "discord.js": "^13.2.0",
-    "dotenv": "^10.0.0",
-    "erlpack": "github:discord/erlpack",
-    "utf-8-validate": "^5.0.9",
-    "validate-color": "^2.2.1",
-    "zlib-sync": "^0.1.7"
-  }
+    "name": "mrstech",
+    "version": "",
+    "description": "dev branch",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node deploy-commands.js && node index.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git@bobbitt.dev:avery/mrstech.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "discord.js": "^13.2.0",
+        "dotenv": "^10.0.0",
+        "utf-8-validate": "^5.0.9",
+        "validate-color": "^2.2.1"
+    }
 }

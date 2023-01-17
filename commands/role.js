@@ -52,7 +52,11 @@ module.exports = {
         const choice = interaction.options.getString("color");
         const newRole = gRoles.cache.find((r) => r.name.toLowerCase() === choice);
 
-        removeColors();
+        colors.forEach((color) => {
+            const oldRole = gRoles.cache.find((r) => r.name.toLowerCase() === color);
+
+            if (mRoles.cache.some((r) => r.name.toLowerCase() === color)) mRoles.remove(oldRole);
+        });
 
         if (choice !== "clear") mRoles.add(newRole);
 
@@ -62,12 +66,3 @@ module.exports = {
         });
     },
 };
-
-// remove all colors
-function removeColors() {
-    colors.forEach((color) => {
-        const oldRole = gRoles.cache.find((r) => r.name.toLowerCase() === color);
-
-        if (mRoles.cache.some((r) => r.name.toLowerCase() === color)) mRoles.remove(oldRole);
-    });
-}
