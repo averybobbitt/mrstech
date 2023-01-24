@@ -2,6 +2,6 @@ module.exports = {
     name: "ready",
     once: true,
     execute() {
-        console.log("Ready!");
+        console.log(`Logged in as ${client.user.tag}!`);
     },
 };
