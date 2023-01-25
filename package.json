@@ -9,7 +9,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git@bobbitt.dev:avery/mrstech.git"
+        "url": "https://git.bobbitt.dev/avery/mrstech.git"
     },
     "author": "",
     "license": "ISC",
