@@ -1,49 +1,59 @@
-// Require the necessary classes
+// IMPORTS
 const fs = require("fs");
+const path = require("node:path");
 const dotenv = require("dotenv");
-const { Client, GatewayIntentBits, REST, Routes } = require("discord.js");
+const { Client, GatewayIntentBits, REST, Routes, Collection } = require("discord.js");
 
-// Create a new client instance
+// SETUP
+dotenv.config();
+
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
 const rest = new REST({ version: "10" }).setToken(process.env.TOKEN);
 
-// Initialize environment variables
-dotenv.config();
-
-// Set up interaction
 init_commands();
 init_events();
 
-// Login to Discord with the client's token
 client.login(process.env.TOKEN);
 
-// initialize and handle commands
+// FUNCTIONS
 function init_commands() {
-  const commands = [];
-  const commandFiles = fs.readdirSync("./commands").filter((file) => file.endsWith(".js"));
+    const commandsPath = path.join(__dirname, "commands");
+    const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith(".js"));
+    client.commands = new Collection();
 
-  // Push each command to commands array
-  for (const file of commandFiles) {
-    const command = require(`./commands/${file}`);
-    commands.push(command.data.toJSON());
-  }
+    // Push each command to commands array
+    for (const file of commandFiles) {
+        const filePath = path.join(commandsPath, file);
+        const command = require(filePath);
 
-  // Push commands to server
-  rest
-    .put(Routes.applicationCommands(process.env.CLIENT_ID), { body: commands })
-    .then(() => console.log("Successfully registered application commands."))
-    .catch(console.error);
+        if ("data" in command && "execute" in command) {
+            client.commands.set(command.data.name, command);
+        } else {
+            console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+        }
+
+        console.log(`Registered ${command.name}`);
+    }
+
+    // Push commands to server
+    rest.put(Routes.applicationCommands(process.env.CLIENT_ID, process.env.GUILD_ID), {
+        body: client.commands,
+    })
+        .then(() => console.log("Successfully registered application commands."))
+        .catch(console.error);
 }
 
-// initialize and handle events
 function init_events() {
-  const events = fs.readdirSync("./events").filter((file) => file.endsWith(".js"));
-  for (const file of events) {
-    const event = require(`./events/${file}`);
-    if (event.once) {
-      client.once(event.name, (...args) => event.execute(...args));
-    } else {
-      client.on(event.name, (...args) => event.execute(...args));
+    const eventsPath = path.join(__dirname, "events");
+    const eventFiles = fs.readdirSync(eventsPath).filter((file) => file.endsWith(".js"));
+
+    for (const file of eventFiles) {
+        const filePath = path.join(eventsPath, file);
+        const event = require(filePath);
+        if (event.once) {
+            client.once(event.name, (...args) => event.execute(...args));
+        } else {
+            client.on(event.name, (...args) => event.execute(...args));
+        }
     }
-  }
 }
