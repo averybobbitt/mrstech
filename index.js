@@ -2,13 +2,22 @@
 const fs = require("fs");
 const path = require("node:path");
 const dotenv = require("dotenv");
-const { Client, GatewayIntentBits, REST, Routes, Collection } = require("discord.js");
+const { Client, GatewayIntentBits, Collection } = require("discord.js");
 
 // SETUP
 dotenv.config();
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
-const rest = new REST({ version: "10" }).setToken(process.env.TOKEN);
+const client = new Client({
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildPresences,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildIntegrations,
+        GatewayIntentBits.GuildBans,
+        GatewayIntentBits.GuildMessageReactions,
+    ],
+});
 
 init_commands();
 init_events();
@@ -20,27 +29,23 @@ function init_commands() {
     const commandsPath = path.join(__dirname, "commands");
     const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith(".js"));
     client.commands = new Collection();
+    var count = 0;
 
     // Push each command to commands array
     for (const file of commandFiles) {
         const filePath = path.join(commandsPath, file);
         const command = require(filePath);
 
-        if ("data" in command && "execute" in command) {
-            client.commands.set(command.data.name, command);
+        if ("execute" in command) {
+            console.log(`Registering /${command.name}...`);
+            client.commands.set(command.name, command);
+            count++;
         } else {
-            console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+            console.log(`[WARNING] The command at ${filePath} is missing a required "execute" property.`);
         }
-
-        console.log(`Registered ${command.name}`);
     }
 
-    // Push commands to server
-    rest.put(Routes.applicationCommands(process.env.CLIENT_ID, process.env.GUILD_ID), {
-        body: client.commands,
-    })
-        .then(() => console.log("Successfully registered application commands."))
-        .catch(console.error);
+    console.log(`Successfully registered ${count} commands.`);
 }
 
 function init_events() {
