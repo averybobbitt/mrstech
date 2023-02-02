@@ -1,11 +1,11 @@
 {
     "name": "mrstech",
     "version": "",
-    "description": "dev branch",
+    "description": "",
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node deploy-commands.js && node index.js"
+        "start": "node index.js"
     },
     "repository": {
         "type": "git",
