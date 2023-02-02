@@ -14,6 +14,7 @@ module.exports = {
 
         try {
             await command.execute(interaction);
+            console.log(`${interaction.user.tag} used /${interaction.commandName}`);
         } catch (error) {
             console.error(`Error executing ${interaction.commandName}`);
             console.error(error);
