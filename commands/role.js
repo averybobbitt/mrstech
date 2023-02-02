@@ -36,22 +36,31 @@ module.exports = {
         },
     ],
     async execute(interaction) {
-        const gRoles = interaction.guild.roles;
-        const mRoles = interaction.member.roles;
         const choice = interaction.options.getString("color");
-        const newRole = gRoles.cache.find((r) => r.name.toLowerCase() === choice);
+        const newRole = interaction.guild.roles.cache.find((r) => r.name.toLowerCase() === choice);
 
-        colors.forEach((color) => {
-            const oldRole = gRoles.cache.find((r) => r.name.toLowerCase() === color);
-
-            if (mRoles.cache.some((r) => r.name.toLowerCase() === color)) mRoles.remove(oldRole);
+        // iterate through all colors in colors[] and if member has role, remove
+        colors.forEach((c) => {
+            // if member has "c" role, remove it
+            if (interaction.member.roles.cache.some((r) => r.name.toLowerCase() === c.name)) {
+                interaction.member.roles.remove(
+                    interaction.guild.roles.cache.find((r) => r.name.toLowerCase() === c.name)
+                );
+            }
         });
 
-        if (choice !== "clear") mRoles.add(newRole);
+        if (choice !== "clear") interaction.member.roles.add(newRole);
 
-        await interaction.reply({
-            content: "Successfully updated user color!",
-            ephemeral: true,
-        });
+        if (choice == "clear") {
+            await interaction.reply({
+                content: `Successfully removed color for **${interaction.user}**!`,
+                ephemeral: true,
+            });
+        } else {
+            await interaction.reply({
+                content: `Successfully set color for **${interaction.user}** to **${choice}**!`,
+                ephemeral: true,
+            });
+        }
     },
 };
