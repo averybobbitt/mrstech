@@ -2,7 +2,7 @@
 const fs = require("fs");
 const path = require("node:path");
 const dotenv = require("dotenv");
-const { Client, GatewayIntentBits, Collection } = require("discord.js");
+const { Client, GatewayIntentBits, Collection, REST, Routes } = require("discord.js");
 
 // SETUP
 dotenv.config();
@@ -18,6 +18,8 @@ const client = new Client({
         GatewayIntentBits.GuildMessageReactions,
     ],
 });
+
+const rest = new REST({ version: "10" }).setToken(process.env.TOKEN);
 
 init_commands();
 init_events();
@@ -37,7 +39,7 @@ function init_commands() {
         const command = require(filePath);
 
         if ("execute" in command) {
-            console.log(`Registering /${command.name}...`);
+            console.log(`Creating /${command.name}...`);
             client.commands.set(command.name, command);
             count++;
         } else {
@@ -45,7 +47,22 @@ function init_commands() {
         }
     }
 
-    console.log(`Successfully registered ${count} commands.`);
+    console.log(`Successfully created ${count} commands.`);
+
+    // push commands to server
+    (async () => {
+        try {
+            console.log("Started refreshing application (/) commands.");
+
+            const data = await rest.put(Routes.applicationGuildCommands(process.env.CLIENT_ID, process.env.GUILD_ID), {
+                body: client.commands,
+            });
+
+            console.log(`Successfully reloaded ${data.length} application (/) commands.`);
+        } catch (error) {
+            console.error(error);
+        }
+    })();
 }
 
 function init_events() {
