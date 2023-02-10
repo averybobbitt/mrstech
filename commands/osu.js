@@ -1,6 +1,5 @@
 const { ApplicationCommandType, ApplicationCommandOptionType } = require("discord.js");
 const validateColor = require("validate-color").default;
-const req = require("requests");
 
 const name = "osu";
 const desc = "generates a osu! signature banner";
