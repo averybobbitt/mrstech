@@ -16,6 +16,7 @@ const client = new Client({
         GatewayIntentBits.GuildIntegrations,
         GatewayIntentBits.GuildBans,
         GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.MessageContent,
     ],
 });
 
@@ -49,7 +50,22 @@ function init_commands() {
 
     console.log(`Successfully created ${count} commands.`);
 
-    // push commands to server
+    // reset global commands
+    (async () => {
+        try {
+            console.log("Purging global application (/) commands.");
+
+            await rest.put(Routes.applicationCommands(process.env.CLIENT_ID), {
+                body: [],
+            });
+
+            console.log(`Successfully purged global application (/) commands.`);
+        } catch (error) {
+            console.error(error);
+        }
+    })();
+
+    // push guild commands to server
     (async () => {
         try {
             console.log("Started refreshing application (/) commands.");
