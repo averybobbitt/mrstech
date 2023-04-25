@@ -17,5 +17,11 @@
         "discord.js": "^14.7.1",
         "dotenv": "^16.0.3",
         "validate-color": "^2.2.1"
+    },
+    "prettier": {
+        "trailingComma": "es5",
+        "tabWidth": 4,
+        "semi": false,
+        "singleQuote": true
     }
 }

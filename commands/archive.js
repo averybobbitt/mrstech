@@ -1,23 +1,27 @@
-const { ApplicationCommandType } = require("discord.js");
+const { ApplicationCommandType } = require('discord.js')
 
-const name = "archive";
-const desc = "Archives current text channel";
+const name = 'archive'
+const desc = 'Archives current text channel'
 
 module.exports = {
     name: name,
     description: desc,
     type: ApplicationCommandType.ChatInput,
     async execute(interaction) {
-        const archive = interaction.guild.channels.cache.find((c) => c.id == process.env.ARCHIVE_ID);
+        const archive = interaction.guild.channels.cache.find(
+            (c) => c.id == process.env.ARCHIVE_ID
+        )
 
-        if (!archive) console.error("Archive category channel not found!");
+        if (!archive) console.error('Archive category channel not found!')
 
-        interaction.channel.setParent(archive);
-        interaction.guild.systemChannel.send(`${interaction.user} archived ${interaction.channel}`);
+        interaction.channel.setParent(archive)
+        interaction.guild.systemChannel.send(
+            `${interaction.user} archived ${interaction.channel}`
+        )
 
         await interaction.reply({
-            content: "Successfully archived channel.",
+            content: 'Successfully archived channel.',
             ephemeral: true,
-        });
+        })
     },
-};
+}
